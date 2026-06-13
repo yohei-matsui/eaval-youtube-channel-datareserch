@@ -195,8 +195,11 @@ export default function App() {
               </span>
             )}
           </div>
-          <p className="text-xs mb-4 ml-7" style={{ color: '#999' }}>
+          <p className="text-xs mb-3 ml-7" style={{ color: '#999' }}>
             日本語で入力すると韓国語・英語に<span style={{ color: '#e82030' }} className="font-medium">自動翻訳</span>して各リージョンで検索します
+          </p>
+          <p className="text-xs mb-3 ml-7" style={{ color: '#f59e0b' }}>
+            ⚠️ 取得件数が多いほどAPI消費が増え、1日の利用上限に達しやすくなります
           </p>
           <form onSubmit={handleSearch} className="flex gap-2">
             <input
@@ -206,6 +209,17 @@ export default function App() {
               placeholder="例：プログラミング、英語学習、料理"
               className="glass-input flex-1 px-4 py-3 text-sm"
             />
+            {/* 取得件数セレクタ */}
+            <select
+              value={resultLimit}
+              onChange={e => setResultLimit(Number(e.target.value))}
+              title="取得件数（多いほどAPI消費が増えます）"
+              className="glass-select px-3 py-2 text-sm"
+            >
+              {[10,20,30,40,50,60,70,80,90,100].map(n => (
+                <option key={n} value={n}>{n}件</option>
+              ))}
+            </select>
             <button
               type="submit"
               disabled={anyLoading || !inputValue.trim()}
@@ -311,7 +325,6 @@ export default function App() {
                     sort={sort} setSort={v => { setSort(v); setSortChanged(true); }}
                     minSubs={minSubs} setMinSubs={setMinSubs}
                     maxSubs={maxSubs} setMaxSubs={setMaxSubs}
-                    resultLimit={resultLimit} setResultLimit={setResultLimit}
                     onReset={() => setSortChanged(false)}
                   />
                   <div className="flex items-center justify-between">
