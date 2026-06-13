@@ -188,7 +188,7 @@ export default function App() {
         <div className="glass-panel p-6">
           <div className="flex items-center gap-2 mb-1">
             <div className="w-5 h-5 rounded-full flex items-center justify-center text-white text-xs font-bold" style={{ background: '#e82030' }}>2</div>
-            <p className="text-sm font-semibold" style={{ color: '#1a1a1a' }}>キーワードを入力してください</p>
+            <p className="text-sm font-semibold" style={{ color: '#1a1a1a' }}>キーワードと取得するチャンネル数を入力してください</p>
             {useMock && (
               <span className="ml-auto text-xs px-2 py-0.5 rounded-full font-medium" style={{ background: 'rgba(217,119,6,0.1)', color: '#b45309' }}>
                 モックデータで動作中
