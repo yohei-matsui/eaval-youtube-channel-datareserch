@@ -1,3 +1,74 @@
+import { useState } from 'react';
+
+function CopyButton({ url }) {
+  const [copied, setCopied] = useState(false);
+  const handleCopy = async () => {
+    await navigator.clipboard.writeText(url);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1500);
+  };
+  return (
+    <button
+      onClick={handleCopy}
+      title="URLをコピー"
+      className="p-1.5 rounded-lg transition-all"
+      style={{
+        color: copied ? '#16a34a' : '#ccc',
+        background: copied ? 'rgba(22,163,74,0.08)' : 'transparent',
+      }}
+      onMouseEnter={e => { if (!copied) e.currentTarget.style.color = '#888'; }}
+      onMouseLeave={e => { if (!copied) e.currentTarget.style.color = '#ccc'; }}
+    >
+      {copied ? (
+        <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <polyline points="20 6 9 17 4 12" />
+        </svg>
+      ) : (
+        <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+        </svg>
+      )}
+    </button>
+  );
+}
+
+/* ── カスタムチェックボックス ── */
+function Checkbox({ checked, indeterminate = false, onChange, title }) {
+  return (
+    <label title={title} className="flex items-center justify-center cursor-pointer w-5 h-5 relative">
+      <input
+        type="checkbox"
+        checked={checked}
+        ref={el => { if (el) el.indeterminate = indeterminate; }}
+        onChange={onChange}
+        className="sr-only"
+      />
+      <span
+        className="w-4 h-4 rounded flex items-center justify-center transition-all shrink-0"
+        style={{
+          background: checked || indeterminate
+            ? 'linear-gradient(145deg, #f03048, #d01828)'
+            : 'rgba(232,32,48,0.07)',
+          boxShadow: checked || indeterminate
+            ? 'inset 0 1px 0 rgba(255,255,255,0.25), 0 2px 6px rgba(220,30,45,0.3)'
+            : 'inset 0 1px 2px rgba(0,0,0,0.08), inset 0 0 0 1px rgba(232,32,48,0.2)',
+        }}
+      >
+        {indeterminate && !checked ? (
+          <svg className="w-2.5 h-2.5" viewBox="0 0 10 2" fill="none">
+            <line x1="1" y1="1" x2="9" y2="1" stroke="white" strokeWidth="2" strokeLinecap="round"/>
+          </svg>
+        ) : checked ? (
+          <svg className="w-2.5 h-2.5" viewBox="0 0 10 8" fill="none">
+            <polyline points="1,4 3.5,6.5 9,1" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        ) : null}
+      </span>
+    </label>
+  );
+}
+
 function fmt(n) {
   if (n >= 100000000) return `${(n / 100000000).toFixed(1)}億`;
   if (n >= 10000) return `${(n / 10000).toFixed(1)}万`;
@@ -22,74 +93,133 @@ const TOOLTIPS = {
   title: 'チャンネル名をクリックするとYouTubeチャンネルページに移動します',
   publishedAt: 'チャンネルが開設された日付です',
   subscriberCount: 'チャンネルの現在の登録者数です',
-  viewCount: 'チャンネル全動画の累計視聴回数です',
+  viewCount: 'チャンネル全動画の累計再生回数です',
   videoCount: 'チャンネルに投稿された動画の総本数です',
+  avgViews: '直近100本のうち3分超の長尺動画のみを対象にした1本あたり平均再生回数です',
+  medianViews: '直近100本のうち3分超の長尺動画のみを対象にした再生回数の中央値です。外れ値の影響を受けにくく実力値に近い指標です',
   ratio: '直近100本の動画を取得し、再生時間が180秒超を長尺・180秒以下をショートとして分類した比率です',
+  copy: 'チャンネルURLをクリップボードにコピーします',
 };
 
 function Th({ children, tooltip, className = '' }) {
   return (
-    <th className={`px-3 py-3 font-medium relative group ${className}`}>
+    <th className={`px-3 py-3 font-medium relative group ${className}`} style={{ color: '#666' }}>
       <span className="cursor-default">{children}</span>
-      <span className="pointer-events-none absolute z-10 bottom-full left-1/2 -translate-x-1/2 mb-2 w-56 rounded bg-gray-800 text-white text-xs font-normal leading-snug px-3 py-2 opacity-0 group-hover:opacity-100 transition-opacity whitespace-normal text-center shadow-lg">
-        {tooltip}
-        <span className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-gray-800" />
-      </span>
+      {tooltip && (
+        <span
+          className="pointer-events-none absolute z-10 bottom-full left-1/2 -translate-x-1/2 mb-2 w-56 rounded-xl text-xs font-normal leading-snug px-3 py-2 opacity-0 group-hover:opacity-100 transition-opacity whitespace-normal text-center shadow-lg"
+          style={{
+            background: 'rgba(30,30,30,0.92)',
+            backdropFilter: 'blur(16px)',
+            color: 'rgba(255,255,255,0.88)',
+            boxShadow: '0 8px 24px rgba(0,0,0,0.25)',
+          }}
+        >
+          {tooltip}
+          <span className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent" style={{ borderTopColor: 'rgba(30,30,30,0.92)' }} />
+        </span>
+      )}
     </th>
   );
 }
 
-export default function ChannelTable({ channels }) {
+export default function ChannelTable({ channels, selectedIds, onToggle, onToggleAll }) {
   if (channels.length === 0) {
-    return <p className="text-center text-gray-400 py-12">データがありません</p>;
+    return <p className="text-center py-12" style={{ color: '#bbb' }}>データがありません</p>;
   }
+
+  const allSelected = channels.length > 0 && channels.every(ch => selectedIds.has(ch.id));
+  const someSelected = channels.some(ch => selectedIds.has(ch.id));
 
   return (
     <div className="overflow-x-auto">
-      <table className="w-full text-sm">
+      <table className="w-full text-sm glass-table">
         <thead>
-          <tr className="bg-gray-100 text-gray-600 text-left">
+          <tr className="text-left">
+            {/* 全選択チェックボックス */}
+            <th className="px-3 py-3 w-10 text-center">
+              <Checkbox
+                checked={allSelected}
+                indeterminate={someSelected && !allSelected}
+                onChange={() => onToggleAll(allSelected)}
+                title={allSelected ? 'すべて解除' : 'すべて選択'}
+              />
+            </th>
             <Th tooltip={TOOLTIPS.title} className="min-w-[180px]">チャンネル名</Th>
             <Th tooltip={TOOLTIPS.publishedAt} className="whitespace-nowrap">開設日</Th>
             <Th tooltip={TOOLTIPS.subscriberCount} className="whitespace-nowrap text-right">登録者数</Th>
-            <Th tooltip={TOOLTIPS.viewCount} className="whitespace-nowrap text-right">合計視聴数</Th>
+            <Th tooltip={TOOLTIPS.viewCount} className="whitespace-nowrap text-right">累計再生回数</Th>
             <Th tooltip={TOOLTIPS.videoCount} className="whitespace-nowrap text-right">動画総数</Th>
+            <Th tooltip={TOOLTIPS.avgViews} className="whitespace-nowrap text-right">
+              <span>平均再生数</span>
+              <span className="block text-xs font-normal" style={{ color: '#bbb' }}>長尺のみ</span>
+            </Th>
+            <Th tooltip={TOOLTIPS.medianViews} className="whitespace-nowrap text-right">
+              <span>中央値</span>
+              <span className="block text-xs font-normal" style={{ color: '#bbb' }}>長尺のみ</span>
+            </Th>
             <Th tooltip={TOOLTIPS.ratio} className="whitespace-nowrap text-center">
               <span>長尺：ショート</span>
-              <span className="block text-xs text-gray-400 font-normal">直近100本の比率</span>
+              <span className="block text-xs font-normal" style={{ color: '#bbb' }}>直近100本の比率</span>
             </Th>
+            <Th tooltip={TOOLTIPS.copy} className="text-center w-10"></Th>
           </tr>
         </thead>
         <tbody>
-          {channels.map((ch, i) => {
+          {channels.map((ch) => {
             const { longPct, shortPct } = fmtRatio(ch.longForm, ch.shorts);
+            const isSelected = selectedIds.has(ch.id);
             return (
-              <tr key={ch.id} className={`border-b border-gray-100 hover:bg-gray-50 ${i % 2 === 0 ? '' : 'bg-gray-50/50'}`}>
+              <tr
+                key={ch.id}
+                onClick={() => onToggle(ch.id)}
+                className="cursor-pointer"
+                style={isSelected ? {
+                  background: 'rgba(232,32,48,0.05)',
+                } : {}}
+              >
+                <td className="px-3 py-3 text-center" onClick={e => e.stopPropagation()}>
+                  <Checkbox
+                    checked={isSelected}
+                    onChange={() => onToggle(ch.id)}
+                  />
+                </td>
                 <td className="px-3 py-3">
                   <a
                     href={ch.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-blue-600 hover:underline font-medium"
+                    onClick={e => e.stopPropagation()}
+                    className="font-medium transition-colors"
+                    style={{ color: '#e82030' }}
+                    onMouseEnter={e => e.target.style.color = '#b01020'}
+                    onMouseLeave={e => e.target.style.color = '#e82030'}
                   >
                     {ch.title}
                   </a>
                 </td>
-                <td className="px-3 py-3 text-gray-500 whitespace-nowrap">{fmtDate(ch.publishedAt)}</td>
-                <td className="px-3 py-3 text-right font-medium">{fmt(ch.subscriberCount)}</td>
-                <td className="px-3 py-3 text-right text-gray-600">{fmt(ch.viewCount)}</td>
-                <td className="px-3 py-3 text-right text-gray-600">{ch.videoCount.toLocaleString()}</td>
+                <td className="px-3 py-3 whitespace-nowrap" style={{ color: '#999' }}>{fmtDate(ch.publishedAt)}</td>
+                <td className="px-3 py-3 text-right font-semibold" style={{ color: '#1a1a1a' }}>{fmt(ch.subscriberCount)}</td>
+                <td className="px-3 py-3 text-right" style={{ color: '#555' }}>{fmt(ch.viewCount)}</td>
+                <td className="px-3 py-3 text-right" style={{ color: '#555' }}>{ch.videoCount.toLocaleString()}</td>
+                <td className="px-3 py-3 text-right" style={{ color: '#555' }}>{fmt(ch.avgViews)}</td>
+                <td className="px-3 py-3 text-right" style={{ color: '#555' }}>{fmt(ch.medianViews)}</td>
                 <td className="px-3 py-3 text-center whitespace-nowrap">
-                  <span className="text-blue-600 font-medium">{longPct}%</span>
-                  <span className="text-gray-400 mx-1">:</span>
-                  <span className="text-pink-500 font-medium">{shortPct}%</span>
+                  <span className="font-medium" style={{ color: '#2563eb' }}>{longPct}%</span>
+                  <span className="mx-1" style={{ color: '#ddd' }}>:</span>
+                  <span className="font-medium" style={{ color: '#e82030' }}>{shortPct}%</span>
+                </td>
+                <td className="px-2 py-3 text-center" onClick={e => e.stopPropagation()}>
+                  <CopyButton url={ch.url} />
                 </td>
               </tr>
             );
           })}
         </tbody>
       </table>
-      <p className="text-xs text-gray-400 mt-2 px-3">※ショートは再生時間が180秒以下の動画。直近100本に基づく比率です</p>
+      <p className="text-xs mt-2 px-3" style={{ color: '#bbb' }}>
+        ※直近100本に基づく集計。平均再生数・中央値は3分超の長尺動画のみが対象。ショートは180秒以下の動画
+      </p>
     </div>
   );
 }
