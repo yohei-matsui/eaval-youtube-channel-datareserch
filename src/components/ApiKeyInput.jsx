@@ -1,15 +1,31 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 export default function ApiKeyInput({ apiKey, onSave }) {
   const [value, setValue] = useState(apiKey || '');
   const [show, setShow] = useState(false);
+  const [saved, setSaved] = useState(!!apiKey);
+  const debounceRef = useRef(null);
 
-  const handleSave = (e) => {
-    e.preventDefault();
-    if (value.trim()) onSave(value.trim());
+  // 入力から500ms後に自動保存
+  const handleChange = (e) => {
+    const v = e.target.value;
+    setValue(v);
+    setSaved(false);
+    clearTimeout(debounceRef.current);
+    if (v.trim()) {
+      debounceRef.current = setTimeout(() => {
+        onSave(v.trim());
+        setSaved(true);
+      }, 500);
+    } else {
+      onSave('');
+    }
   };
 
-  const isSaved = apiKey && apiKey === value.trim();
+  // 外部からapiKeyが変わったとき（削除など）に同期
+  useEffect(() => {
+    if (!apiKey) { setValue(''); setSaved(false); }
+  }, [apiKey]);
 
   return (
     <div className="glass-panel p-6">
@@ -26,12 +42,12 @@ export default function ApiKeyInput({ apiKey, onSave }) {
         🔒 キーはブラウザの SessionStorage にのみ保持され、サーバーには送信・保存されません
       </p>
 
-      <form onSubmit={handleSave} className="flex gap-2 items-center">
+      <div className="flex gap-2 items-center">
         <div className="relative flex-1">
           <input
             type={show ? 'text' : 'password'}
             value={value}
-            onChange={e => setValue(e.target.value)}
+            onChange={handleChange}
             placeholder="AIza..."
             className="glass-input w-full px-4 py-2.5 pr-12 text-sm font-mono"
           />
@@ -46,26 +62,19 @@ export default function ApiKeyInput({ apiKey, onSave }) {
             {show ? '隠す' : '表示'}
           </button>
         </div>
-        <button
-          type="submit"
-          disabled={!value.trim()}
-          className="glass-btn-primary px-5 py-2.5 text-sm whitespace-nowrap"
-        >
-          保存
-        </button>
         {apiKey && (
           <button
             type="button"
-            onClick={() => { setValue(''); onSave(''); }}
+            onClick={() => { setValue(''); onSave(''); setSaved(false); }}
             className="glass-btn-secondary px-4 py-2.5 text-sm whitespace-nowrap"
           >
             削除
           </button>
         )}
-      </form>
+      </div>
 
       <div className="mt-3 flex items-center gap-3">
-        {isSaved ? (
+        {saved && apiKey ? (
           <span className="text-xs font-medium flex items-center gap-1" style={{ color: '#16a34a' }}>
             <span>✓</span> APIキーが設定されています
           </span>
