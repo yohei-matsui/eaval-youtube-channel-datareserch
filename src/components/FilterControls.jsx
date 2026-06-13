@@ -61,6 +61,9 @@ export default function FilterControls({ sort, setSort, minSubs, setMinSubs, max
           取得件数
           <span className="ml-1 font-normal" style={{ color: '#bbb' }}>（次回検索から適用）</span>
         </label>
+        <p className="text-xs mb-1" style={{ color: '#f59e0b' }}>
+          ⚠️ 件数が多いほどAPI消費が増え、1日の上限に達しやすくなります
+        </p>
         <select
           value={resultLimit}
           onChange={e => setResultLimit(Number(e.target.value))}
