@@ -39,7 +39,7 @@ export default function ApiKeyInput({ apiKey, onSave }) {
         <p className="text-sm font-semibold" style={{ color: '#1a1a1a' }}>APIキー設定</p>
       </div>
       <p className="text-xs mb-4 ml-7" style={{ color: '#999' }}>
-        🔒 キーはブラウザの SessionStorage にのみ保持され、サーバーには送信・保存されません
+        キーはブラウザの SessionStorage にのみ保持され、サーバーには送信・保存されません
       </p>
 
       <div className="flex gap-2 items-center">
