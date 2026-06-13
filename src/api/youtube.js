@@ -116,12 +116,20 @@ async function fetchChannelsBatch(channelIds, apiKey) {
   );
 }
 
-export async function loadChannels(query, regionCode, apiKey) {
+export async function loadChannels(query, regionCode, apiKey, limit = 100) {
   // 1ページ目（50件）
   const page1 = await searchChannels(query, regionCode, apiKey);
   if (page1.channelIds.length === 0) return { channels: [], nextPageToken: null };
 
-  // 2ページ目（50件）をページ1と並列取得
+  // 50件以下ならpage1だけ取得
+  if (limit <= 50) {
+    const ids = page1.channelIds.slice(0, limit);
+    const batch1 = await fetchChannelsBatch(ids, apiKey);
+    batch1.sort((a, b) => b.subscriberCount - a.subscriberCount);
+    return { channels: batch1, nextPageToken: null };
+  }
+
+  // 51件以上は2ページ目も取得
   const page2Promise = page1.nextPageToken
     ? searchChannels(query, regionCode, apiKey, page1.nextPageToken)
     : Promise.resolve({ channelIds: [], nextPageToken: null });
@@ -131,10 +139,10 @@ export async function loadChannels(query, regionCode, apiKey) {
     page2Promise,
   ]);
 
-  const batch2 = await fetchChannelsBatch(page2.channelIds, apiKey);
+  const batch2 = await fetchChannelsBatch(page2.channelIds.slice(0, limit - 50), apiKey);
 
   const channels = [...batch1, ...batch2];
   channels.sort((a, b) => b.subscriberCount - a.subscriberCount);
 
-  return { channels, nextPageToken: null };
+  return { channels: channels.slice(0, limit), nextPageToken: null };
 }

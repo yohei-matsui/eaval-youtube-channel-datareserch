@@ -50,6 +50,7 @@ export default function App() {
   const [minSubs, setMinSubs] = useState('');
   const [maxSubs, setMaxSubs] = useState('');
   const [selectedIds, setSelectedIds] = useState(new Set());
+  const [resultLimit, setResultLimit] = useState(50);
 
   const useMock = !apiKey;
 
@@ -72,7 +73,7 @@ export default function App() {
       if (useMock) {
         result = getMockChannels(region, 0, query);
       } else {
-        result = await loadChannels(query, region, apiKey);
+        result = await loadChannels(query, region, apiKey, resultLimit);
       }
       if (fresh) {
         setRegionData(prev => ({ ...prev, [region]: { ...result, mockPage: 0 } }));
@@ -310,6 +311,7 @@ export default function App() {
                     sort={sort} setSort={v => { setSort(v); setSortChanged(true); }}
                     minSubs={minSubs} setMinSubs={setMinSubs}
                     maxSubs={maxSubs} setMaxSubs={setMaxSubs}
+                    resultLimit={resultLimit} setResultLimit={setResultLimit}
                     onReset={() => setSortChanged(false)}
                   />
                   <div className="flex items-center justify-between">
