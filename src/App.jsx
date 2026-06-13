@@ -144,7 +144,7 @@ export default function App() {
       <header className="pt-8 pb-2 text-center">
         <div className="inline-flex items-center gap-3 mb-1">
           <img src="/logo.png" alt="EAVAL" className="w-10 h-10 object-contain" />
-          <span className="font-bold text-base tracking-wide" style={{ color: '#1a1a1a' }}>YouTubeチャンネルデータ分析ツール</span>
+          <span className="font-bold text-base tracking-wide" style={{ color: '#1a1a1a' }}>YouTubeチャンネルデータリサーチツール</span>
         </div>
       </header>
 
