@@ -146,18 +146,18 @@ export default function App() {
         <div className="inline-flex items-center gap-3 mb-1">
           <img src="/logo.png" alt="EAVAL" className="w-10 h-10 object-contain" />
           <div>
-            <span className="font-bold text-base tracking-wide" style={{ color: '#1a1a1a' }}>YouTubeチャンネルデータリサーチツール</span>
-            <p className="text-xs mt-0.5" style={{ color: '#aaa' }}>by 株式会社EAVAL</p>
+            <span className="font-bold text-base tracking-wide" style={{ color: '#1F2937' }}>YouTubeチャンネルデータリサーチツール</span>
+            <p className="text-xs mt-0.5" style={{ color: '#9CA3AF' }}>by 株式会社EAVAL</p>
           </div>
         </div>
       </header>
 
       {/* Hero */}
       <section className="text-center px-6 pt-6 pb-8">
-        <h1 className="text-3xl font-bold mb-3 leading-snug" style={{ color: '#1a1a1a' }}>
+        <h1 className="text-3xl font-bold mb-3 leading-snug" style={{ color: '#1F2937' }}>
           キーワードから競合チャンネルをリサーチしてデータを抽出するツールです
         </h1>
-        <p className="text-sm max-w-xl mx-auto leading-relaxed" style={{ color: '#888' }}>
+        <p className="text-sm max-w-xl mx-auto leading-relaxed" style={{ color: '#6B7280' }}>
           検索キーワードを入力するだけで、日本・韓国・アメリカからそれぞれ関連チャンネルを一括取得。
           登録者数・視聴数・長尺/ショート比率などを一覧で比較できます。
         </p>
@@ -165,18 +165,18 @@ export default function App() {
 
       {/* Steps */}
       <section className="px-6 pb-8">
-        <p className="text-center text-xs font-medium mb-4 tracking-widest uppercase" style={{ color: '#bbb' }}>使い方</p>
+        <p className="text-center text-xs font-medium mb-4 tracking-widest uppercase" style={{ color: '#9CA3AF' }}>使い方</p>
         <div className="flex justify-center items-start gap-3 max-w-4xl mx-auto">
           {STEPS.map((step, i) => (
             <div key={step.num} className="flex items-start gap-3">
               <div className="glass-card p-4 w-44 text-center">
-                <div className="text-xs font-bold mb-1" style={{ color: '#e82030' }}>{step.num}</div>
+                <div className="text-xs font-bold mb-1" style={{ color: '#dc2030' }}>{step.num}</div>
                 <div className="text-2xl mb-2">{step.icon}</div>
-                <div className="text-sm font-semibold mb-1" style={{ color: '#1a1a1a' }}>{step.title}</div>
-                <div className="text-xs leading-relaxed" style={{ color: '#999' }}>{step.desc}</div>
+                <div className="text-sm font-semibold mb-1" style={{ color: '#1F2937' }}>{step.title}</div>
+                <div className="text-xs leading-relaxed" style={{ color: '#6B7280' }}>{step.desc}</div>
               </div>
               {i < STEPS.length - 1 && (
-                <span className="text-lg mt-10" style={{ color: '#ddd' }}>›</span>
+                <span className="text-lg mt-10" style={{ color: '#D1D5DB' }}>›</span>
               )}
             </div>
           ))}
@@ -190,15 +190,15 @@ export default function App() {
         {/* Step 2: Search */}
         <div className="glass-panel p-6">
           <div className="flex items-center gap-2 mb-1">
-            <div className="w-5 h-5 rounded-full flex items-center justify-center text-white text-xs font-bold" style={{ background: '#e82030' }}>2</div>
-            <p className="text-sm font-semibold" style={{ color: '#1a1a1a' }}>キーワードと取得するチャンネル数を入力してください</p>
+            <div className="w-5 h-5 rounded-full flex items-center justify-center text-white text-xs font-bold" style={{ background: '#dc2030' }}>2</div>
+            <p className="text-sm font-semibold" style={{ color: '#1F2937' }}>キーワードと取得するチャンネル数を入力してください</p>
             {useMock && (
-              <span className="ml-auto text-xs px-2 py-0.5 rounded-full font-medium" style={{ background: 'rgba(217,119,6,0.1)', color: '#b45309' }}>
+              <span className="ml-auto text-xs px-2 py-0.5 rounded-full font-medium" style={{ background: 'rgba(217,119,6,0.1)', color: '#92400e' }}>
                 モックデータで動作中
               </span>
             )}
           </div>
-          <p className="text-xs mb-4 ml-7" style={{ color: '#999' }}>
+          <p className="text-xs mb-4 ml-7" style={{ color: '#6B7280' }}>
             日本語で入力すると韓国語・英語に自動翻訳して各リージョンで検索します
           </p>
           <form onSubmit={handleSearch} className="flex gap-2">
@@ -254,10 +254,10 @@ export default function App() {
           {/* 翻訳済みキーワード表示 */}
           {hasSearched && !translating && (
             <div className="mt-4 space-y-2">
-              <p className="text-xs font-medium" style={{ color: '#999' }}>各リージョンの検索キーワード（編集して再検索も可能）</p>
+              <p className="text-xs font-medium" style={{ color: '#6B7280' }}>各リージョンの検索キーワード（編集して再検索も可能）</p>
               {REGIONS.map(region => (
                 <div key={region} className="flex gap-2 items-center">
-                  <span className="text-xs w-28 shrink-0" style={{ color: '#777' }}>{REGION_LABEL[region]}</span>
+                  <span className="text-xs w-28 shrink-0" style={{ color: '#6B7280' }}>{REGION_LABEL[region]}</span>
                   <input
                     type="text"
                     value={translatedQueries[region] || ''}
@@ -283,13 +283,13 @@ export default function App() {
       {hasSearched && (
         <div className="max-w-6xl mx-auto px-6 pb-12">
           {error && (
-            <div className="mb-4 p-4 rounded-xl text-sm" style={{ background: 'rgba(232,32,48,0.08)', color: '#c01020' }}>
+            <div className="mb-4 p-4 rounded-xl text-sm glass-panel" style={{ color: '#be1828' }}>
               エラー: {error}
             </div>
           )}
 
           {useMock && (
-            <div className="mb-4 flex items-start gap-3 p-4 rounded-xl text-sm" style={{ background: 'rgba(217,119,6,0.08)', color: '#92400e' }}>
+            <div className="mb-4 flex items-start gap-3 p-4 rounded-xl text-sm glass-panel" style={{ color: '#92400e' }}>
               <span className="text-lg leading-none">⚠️</span>
               <div>
                 <p className="font-semibold mb-0.5">デモ表示中 — 表示されているのはサンプルデータです</p>
@@ -299,14 +299,14 @@ export default function App() {
           )}
 
           <div className="glass-panel overflow-hidden">
-            <div className="px-6 pt-5 pb-0" style={{ borderBottom: '1px solid rgba(232,32,48,0.08)' }}>
+            <div className="px-6 pt-5 pb-0" style={{ borderBottom: '1px solid rgba(0,0,0,0.05)' }}>
               <div className="flex items-center gap-2 mb-3">
-                <div className="w-5 h-5 rounded-full flex items-center justify-center text-white text-xs font-bold" style={{ background: '#e82030' }}>3</div>
-                <p className="text-sm font-semibold" style={{ color: '#1a1a1a' }}>
+                <div className="w-5 h-5 rounded-full flex items-center justify-center text-white text-xs font-bold" style={{ background: '#dc2030' }}>3</div>
+                <p className="text-sm font-semibold" style={{ color: '#1F2937' }}>
                   検索結果
                   {translatedQueries[activeRegion] && (
-                    <span className="ml-2 font-normal" style={{ color: '#999' }}>
-                      「<span style={{ color: '#e82030' }}>{translatedQueries[activeRegion]}</span>」
+                    <span className="ml-2 font-normal" style={{ color: '#6B7280' }}>
+                      「<span style={{ color: '#dc2030' }}>{translatedQueries[activeRegion]}</span>」
                     </span>
                   )}
                 </p>
@@ -318,7 +318,7 @@ export default function App() {
               {currentLoading || translating ? (
                 <div className="text-center py-16">
                   <div className="glass-spinner inline-block w-8 h-8 mb-3"></div>
-                  <p className="text-sm" style={{ color: '#aaa' }}>
+                  <p className="text-sm" style={{ color: '#9CA3AF' }}>
                     {translating ? 'キーワードを翻訳中...' : 'チャンネルデータを取得中...'}
                   </p>
                 </div>
@@ -331,10 +331,10 @@ export default function App() {
                     onReset={() => setSortChanged(false)}
                   />
                   <div className="flex items-center justify-between">
-                    <div className="text-xs" style={{ color: '#aaa' }}>
+                    <div className="text-xs" style={{ color: '#9CA3AF' }}>
                       {displayed.length} チャンネル表示中
                       {selectedIds.size > 0 && (
-                        <span className="ml-2 font-medium" style={{ color: '#e82030' }}>
+                        <span className="ml-2 font-medium" style={{ color: '#dc2030' }}>
                           {selectedIds.size}件選択中
                         </span>
                       )}

@@ -6,7 +6,6 @@ export default function ApiKeyInput({ apiKey, onSave }) {
   const [saved, setSaved] = useState(!!apiKey);
   const debounceRef = useRef(null);
 
-  // 入力から500ms後に自動保存
   const handleChange = (e) => {
     const v = e.target.value;
     setValue(v);
@@ -22,7 +21,6 @@ export default function ApiKeyInput({ apiKey, onSave }) {
     }
   };
 
-  // 外部からapiKeyが変わったとき（削除など）に同期
   useEffect(() => {
     if (!apiKey) { setValue(''); setSaved(false); }
   }, [apiKey]);
@@ -30,15 +28,11 @@ export default function ApiKeyInput({ apiKey, onSave }) {
   return (
     <div className="glass-panel p-6">
       <div className="flex items-center gap-2 mb-1">
-        <div
-          className="w-5 h-5 rounded-full flex items-center justify-center text-white text-xs font-bold"
-          style={{ background: '#e82030' }}
-        >
-          1
-        </div>
-        <p className="text-sm font-semibold" style={{ color: '#1a1a1a' }}>APIキー設定</p>
+        <div className="w-5 h-5 rounded-full flex items-center justify-center text-white text-xs font-bold"
+          style={{ background: '#dc2030' }}>1</div>
+        <p className="text-sm font-semibold" style={{ color: '#1F2937' }}>APIキー設定</p>
       </div>
-      <p className="text-xs mb-4 ml-7" style={{ color: '#999' }}>
+      <p className="text-xs mb-4 ml-7" style={{ color: '#6B7280' }}>
         キーはブラウザの SessionStorage にのみ保持され、サーバーには送信・保存されません
       </p>
 
@@ -55,9 +49,9 @@ export default function ApiKeyInput({ apiKey, onSave }) {
             type="button"
             onClick={() => setShow(v => !v)}
             className="absolute right-3 top-1/2 -translate-y-1/2 text-xs transition-colors"
-            style={{ color: '#aaa' }}
-            onMouseEnter={e => e.target.style.color = '#555'}
-            onMouseLeave={e => e.target.style.color = '#aaa'}
+            style={{ color: '#9CA3AF' }}
+            onMouseEnter={e => e.target.style.color = '#374151'}
+            onMouseLeave={e => e.target.style.color = '#9CA3AF'}
           >
             {show ? '隠す' : '表示'}
           </button>
@@ -88,9 +82,9 @@ export default function ApiKeyInput({ apiKey, onSave }) {
           target="_blank"
           rel="noopener noreferrer"
           className="text-xs ml-auto transition-colors"
-          style={{ color: '#e82030' }}
-          onMouseEnter={e => e.target.style.color = '#b01020'}
-          onMouseLeave={e => e.target.style.color = '#e82030'}
+          style={{ color: '#dc2030' }}
+          onMouseEnter={e => e.target.style.color = '#9e1020'}
+          onMouseLeave={e => e.target.style.color = '#dc2030'}
         >
           YouTube Data API v3 の取得方法はこちら ↗
         </a>

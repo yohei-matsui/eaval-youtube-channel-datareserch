@@ -6,7 +6,7 @@ const REGIONS = [
 
 export default function RegionTabs({ active, onChange }) {
   return (
-    <div className="flex" style={{ borderBottom: '1px solid rgba(232,32,48,0.1)' }}>
+    <div className="flex" style={{ borderBottom: '1px solid rgba(0,0,0,0.06)' }}>
       {REGIONS.map(r => (
         <button
           key={r.code}
