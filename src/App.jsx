@@ -195,11 +195,8 @@ export default function App() {
               </span>
             )}
           </div>
-          <p className="text-xs mb-3 ml-7" style={{ color: '#999' }}>
+          <p className="text-xs mb-4 ml-7" style={{ color: '#999' }}>
             日本語で入力すると韓国語・英語に<span style={{ color: '#e82030' }} className="font-medium">自動翻訳</span>して各リージョンで検索します
-          </p>
-          <p className="text-xs mb-3 ml-7" style={{ color: '#f59e0b' }}>
-            ⚠️ 取得件数が多いほどAPI消費が増え、1日の利用上限に達しやすくなります
           </p>
           <form onSubmit={handleSearch} className="flex gap-2">
             <input
@@ -228,6 +225,9 @@ export default function App() {
               {translating ? '翻訳中…' : anyLoading ? '検索中…' : 'チャンネル取得 & 分析スタート'}
             </button>
           </form>
+          <p className="text-xs mt-2 ml-1" style={{ color: '#f59e0b' }}>
+            ⚠️ 取得件数が多いほどAPI消費が増え、1日の利用上限に達しやすくなります
+          </p>
 
           {/* サジェストキーワード */}
           {hasSearched && (
