@@ -199,7 +199,7 @@ export default function App() {
             )}
           </div>
           <p className="text-xs mb-4 ml-7" style={{ color: '#999' }}>
-            日本語で入力すると韓国語・英語に<span style={{ color: '#e82030' }} className="font-medium">自動翻訳</span>して各リージョンで検索します
+            日本語で入力すると韓国語・英語に自動翻訳して各リージョンで検索します
           </p>
           <form onSubmit={handleSearch} className="flex gap-2">
             <input
