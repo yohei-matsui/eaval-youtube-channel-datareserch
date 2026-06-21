@@ -141,7 +141,6 @@ export default function ChannelTable({ channels, selectedIds, onToggle, onToggle
               <span>長尺：ショート</span>
               <span className="block text-xs font-normal" style={{ color: '#9CA3AF' }}>直近100本の比率</span>
             </Th>
-            <Th tooltip={TOOLTIPS.copy} className="text-center w-10"></Th>
           </tr>
         </thead>
         <tbody>
@@ -157,11 +156,14 @@ export default function ChannelTable({ channels, selectedIds, onToggle, onToggle
                 <td className="px-3 py-3">
                   <a href={ch.url} target="_blank" rel="noopener noreferrer"
                     onClick={e => e.stopPropagation()}
-                    className="font-medium transition-colors"
+                    className="font-medium transition-colors block"
                     style={{ color: '#dc2030' }}
                     onMouseEnter={e => e.target.style.color = '#9e1020'}
                     onMouseLeave={e => e.target.style.color = '#dc2030'}
                   >{ch.title}</a>
+                  <div onClick={e => e.stopPropagation()}>
+                    <CopyButton url={ch.url} />
+                  </div>
                 </td>
                 <td className="px-3 py-3 whitespace-nowrap" style={{ color: '#9CA3AF' }}>{fmtDate(ch.publishedAt)}</td>
                 <td className="px-3 py-3 text-right font-semibold" style={{ color: '#1F2937' }}>{fmt(ch.subscriberCount)}</td>
@@ -173,9 +175,6 @@ export default function ChannelTable({ channels, selectedIds, onToggle, onToggle
                   <span className="font-medium" style={{ color: '#2563eb' }}>{longPct}%</span>
                   <span className="mx-1" style={{ color: '#E5E7EB' }}>:</span>
                   <span className="font-medium" style={{ color: '#dc2030' }}>{shortPct}%</span>
-                </td>
-                <td className="px-2 py-3 text-center" onClick={e => e.stopPropagation()}>
-                  <CopyButton url={ch.url} />
                 </td>
               </tr>
             );
