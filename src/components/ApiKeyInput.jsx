@@ -74,7 +74,7 @@ export default function ApiKeyInput({ apiKey, onSave }) {
           </span>
         ) : (
           <span className="text-xs font-medium flex items-center gap-1" style={{ color: '#b45309' }}>
-            <span>⚠</span> APIキー未設定（モックデータで動作中）
+            <span>⚠</span> APIキーが未設定です
           </span>
         )}
         <a
