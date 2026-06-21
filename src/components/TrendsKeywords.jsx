@@ -26,7 +26,7 @@ export default function TrendsKeywords({ top, rising, onSelect, loading }) {
 
       {rising.length > 0 && (
         <div className="mb-3">
-          <p className="text-xs font-medium mb-2" style={{ color: '#d97706' }}>🔥 急上昇</p>
+          <p className="text-xs font-medium mb-2" style={{ color: '#d97706' }}>🔥急上昇</p>
           <div className="flex gap-2 flex-wrap">
             {rising.map((item, i) => (
               <button key={i} onClick={() => onSelect(item.query)}
@@ -45,7 +45,7 @@ export default function TrendsKeywords({ top, rising, onSelect, loading }) {
 
       {top.length > 0 && (
         <div>
-          <p className="text-xs font-medium mb-2" style={{ color: '#2563eb' }}>🔎 他の人はこちらも検索</p>
+          <p className="text-xs font-medium mb-2" style={{ color: '#2563eb' }}>🔎他の人はこちらも検索</p>
           <div className="flex gap-2 flex-wrap">
             {top.map((item, i) => (
               <button key={i} onClick={() => onSelect(item.query)}
