@@ -5,7 +5,6 @@ import ChannelTable from './components/ChannelTable';
 import ApiKeyInput from './components/ApiKeyInput';
 import ExportButtons from './components/ExportButtons';
 import { loadChannels } from './api/youtube';
-import { getMockChannels } from './api/mock';
 import { translateToAllRegions } from './api/translate';
 import { fetchSuggestions } from './api/suggest';
 import { fetchTrends } from './api/trends';
@@ -52,8 +51,6 @@ export default function App() {
   const [selectedIds, setSelectedIds] = useState(new Set());
   const [resultLimit, setResultLimit] = useState(50);
 
-  const useMock = !apiKey;
-
   const handleSaveKey = (key) => {
     setApiKey(key);
     try {
@@ -66,20 +63,11 @@ export default function App() {
     setTrends({ top: [], rising: [] });
   };
 
-  const searchRegion = async (region, query, fresh = false) => {
+  const searchRegion = async (region, query) => {
     setRegionLoading(prev => ({ ...prev, [region]: true }));
     try {
-      let result;
-      if (useMock) {
-        result = getMockChannels(region, 0, query);
-      } else {
-        result = await loadChannels(query, region, apiKey, resultLimit);
-      }
-      if (fresh) {
-        setRegionData(prev => ({ ...prev, [region]: { ...result, mockPage: 0 } }));
-      } else {
-        setRegionData(prev => ({ ...prev, [region]: { ...result, mockPage: 0 } }));
-      }
+      const result = await loadChannels(query, region, apiKey, resultLimit);
+      setRegionData(prev => ({ ...prev, [region]: { ...result, mockPage: 0 } }));
     } catch (err) {
       setError(err.message);
     } finally {
@@ -89,7 +77,7 @@ export default function App() {
 
   const handleSearch = async (e) => {
     e.preventDefault();
-    if (!inputValue.trim()) return;
+    if (!inputValue.trim() || !apiKey) return;
     const q = inputValue.trim();
     setError(null);
     setSortChanged(false);
@@ -192,11 +180,6 @@ export default function App() {
           <div className="flex items-center gap-2 mb-1">
             <div className="w-5 h-5 rounded-full flex items-center justify-center text-white text-xs font-bold" style={{ background: '#dc2030' }}>2</div>
             <p className="text-sm font-semibold" style={{ color: '#1F2937' }}>キーワードと取得するチャンネル数を入力してください</p>
-            {useMock && (
-              <span className="ml-auto text-xs px-2 py-0.5 rounded-full font-medium" style={{ background: 'rgba(217,119,6,0.1)', color: '#92400e' }}>
-                モックデータで動作中
-              </span>
-            )}
           </div>
           <p className="text-xs mb-4 ml-7" style={{ color: '#6B7280' }}>
             日本語で入力すると韓国語・英語に自動翻訳して各リージョンで検索します
@@ -222,13 +205,19 @@ export default function App() {
             </select>
             <button
               type="submit"
-              disabled={anyLoading || !inputValue.trim()}
+              disabled={anyLoading || !inputValue.trim() || !apiKey}
               className="glass-btn-primary px-6 py-3 text-sm whitespace-nowrap"
+              title={!apiKey ? 'APIキーを設定してください' : ''}
             >
               {translating ? '翻訳中…' : anyLoading ? '検索中…' : 'チャンネル取得 & 分析スタート'}
             </button>
           </form>
-          <p className="text-xs mt-2 ml-1" style={{ color: '#f59e0b' }}>
+          {!apiKey && (
+            <p className="text-xs mt-2 ml-1" style={{ color: '#dc2030' }}>
+              ※ APIキーを設定すると検索が有効になります
+            </p>
+          )}
+          <p className="text-xs mt-1 ml-1" style={{ color: '#f59e0b' }}>
             ⚠️ 取得件数が多いほどAPI消費が増え、1日の利用上限に達しやすくなります
           </p>
 
@@ -288,15 +277,6 @@ export default function App() {
             </div>
           )}
 
-          {useMock && (
-            <div className="mb-4 flex items-start gap-3 p-4 rounded-xl text-sm glass-panel" style={{ color: '#92400e' }}>
-              <span className="text-lg leading-none">⚠️</span>
-              <div>
-                <p className="font-semibold mb-0.5">デモ表示中 — 表示されているのはサンプルデータです</p>
-                <p className="text-xs" style={{ color: '#b45309' }}>APIキーを設定すると実際のYouTubeチャンネルが取得されます。</p>
-              </div>
-            </div>
-          )}
 
           <div className="glass-panel overflow-hidden">
             <div className="px-6 pt-5 pb-0" style={{ borderBottom: '1px solid rgba(0,0,0,0.05)' }}>
